@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Postal Clerk Login | Fayda National ID Counter Dispatch</title>
+  <meta name="description" content="Secure postal counter clerk login for Fayda National ID dispatch, storage bin retrieval, and citizen handover.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="login-body">
+
+  <div class="login-wrapper">
+    <!-- Brand Header -->
+    <div class="login-header">
+      <div class="brand-emblem-large">🇪🇹</div>
+      <h1>Fayda Postal Dispatch</h1>
+      <p class="subtitle">Adama Main Post Office • Staff Counter Terminal</p>
+    </div>
+
+    <!-- Login Card -->
+    <div class="login-card">
+      <div class="login-card-header">
+        <h2>🔒 Staff Authentication</h2>
+        <p>Log in with your postal clerk credentials to operate your counter desk.</p>
+      </div>
+
+      <div id="loginAlert" class="alert-box alert-error" style="display: none;" role="alert"></div>
+
+      <form id="loginForm" class="login-form">
+        <!-- Username Input -->
+        <div class="form-group">
+          <label for="usernameInput" class="form-label">
+            <span>👤</span> Staff Username / Clerk ID
+          </label>
+          <input 
+            type="text" 
+            id="usernameInput" 
+            class="form-input" 
+            placeholder="e.g. clerk, clerk1, admin" 
+            value="clerk" 
+            required
+            autocomplete="username"
+          >
+        </div>
+
+        <!-- Password Input -->
+        <div class="form-group">
+          <label for="passwordInput" class="form-label">
+            <span>🔑</span> Password
+          </label>
+          <input 
+            type="password" 
+            id="passwordInput" 
+            class="form-input" 
+            placeholder="Enter clerk password" 
+            value="fayda2026" 
+            required
+            autocomplete="current-password"
+          >
+          <span class="input-hint">Default shared branch password: <code>fayda2026</code> or <code>clerk123</code></span>
+        </div>
+
+        <!-- Desk Assignment Selection -->
+        <div class="form-group">
+          <label for="deskSelect" class="form-label">
+            <span>🏢</span> Assigned Counter Desk
+          </label>
+          <select id="deskSelect" class="form-input form-select" required>
+            <option value="Desk 1 (Priority & Accessibility Counter)">Desk 1 (Priority & Accessibility Counter)</option>
+            <option value="Desk 2 (Counter Desk 2)" selected>Desk 2 (Counter Desk 2 - Shelf A)</option>
+            <option value="Desk 3 (Counter Desk 3)">Desk 3 (Counter Desk 3 - Shelf B)</option>
+          </select>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" id="loginSubmitBtn" class="btn-primary btn-block">
+          <span>Sign In to Counter Terminal →</span>
+        </button>
+      </form>
+
+      <!-- Quick Fill Desk Presets -->
+      <div class="login-presets">
+        <span class="preset-label">⚡ Quick-fill Presets:</span>
+        <div class="preset-buttons">
+          <button type="button" class="preset-chip" onclick="setPreset('clerk1', 'fayda2026', 'Desk 1 (Priority & Accessibility Counter)')">
+            Desk 1 (Priority)
+          </button>
+          <button type="button" class="preset-chip" onclick="setPreset('clerk2', 'fayda2026', 'Desk 2 (Counter Desk 2)')">
+            Desk 2 (Shelf A)
+          </button>
+          <button type="button" class="preset-chip" onclick="setPreset('clerk3', 'fayda2026', 'Desk 3 (Counter Desk 3)')">
+            Desk 3 (Shelf B)
+          </button>
+        </div>
+      </div>
+
+      <!-- Public Kiosk Link -->
+      <div class="login-footer">
+        <a href="/" class="link-kiosk">← Return to Citizen Self-Service Kiosk</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = window.location.origin.includes('8000') 
+      ? '' 
+      : (window.location.origin.startsWith('http') ? '' : 'http://127.0.0.1:8000');
+
+    function setPreset(user, pass, desk) {
+      document.getElementById('usernameInput').value = user;
+      document.getElementById('passwordInput').value = pass;
+      document.getElementById('deskSelect').value = desk;
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('usernameInput').value.trim();
+      const password = document.getElementById('passwordInput').value.trim();
+      const desk = document.getElementById('deskSelect').value;
+      const alertBox = document.getElementById('loginAlert');
+      const submitBtn = document.getElementById('loginSubmitBtn');
+
+      alertBox.style.display = 'none';
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span>Authenticating...</span>';
+
+      try {
+        const res = await fetch(`${API_BASE}/api/v1/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password, desk })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.detail || 'Authentication failed');
+        }
+
+        // Store session data
+        sessionStorage.setItem('fayda_clerk_auth', JSON.stringify({
+          token: data.token,
+          clerk_id: data.clerk_id,
+          clerk_name: data.clerk_name,
+          desk: data.desk,
+          loginTime: new Date().toISOString()
+        }));
+
+        // Redirect to Clerk Terminal
+        window.location.href = 'clerk.html';
+
+      } catch (err) {
+        alertBox.textContent = err.message;
+        alertBox.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<span>Sign In to Counter Terminal →</span>';
+      }
+    });
+  </script>
+</body>
+</html>

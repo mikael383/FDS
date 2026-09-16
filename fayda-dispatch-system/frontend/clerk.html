@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Postal Counter Terminal | Fayda ID Handover & Storage Retrieval</title>
+  <meta name="description" content="Official postal clerk counter terminal for Fayda National ID retrieval, physical storage locator, and handover audit issuing.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="main-header">
+    <div class="header-container">
+      <div class="brand-group">
+        <div class="brand-emblem" aria-hidden="true">🇪🇹</div>
+        <div class="brand-titles">
+          <h1>
+            Fayda Dispatch Terminal
+            <span class="badge-fayda">Clerk Operations</span>
+          </h1>
+          <p>Adama Main Post Office • Desk Dispatch & Handover System</p>
+        </div>
+      </div>
+      <nav class="nav-links" aria-label="Staff Navigation">
+        <div class="clerk-session-badge" id="clerkSessionBadge">
+          <span class="user-avatar">👤</span>
+          <span id="clerkSessionName">Officer Clerk</span>
+          <span class="desk-pill-tag" id="clerkSessionDesk">Desk 1</span>
+        </div>
+        <a href="/" class="nav-btn-secondary" title="View Citizen Kiosk">
+          <span>🖥️</span> Kiosk
+        </a>
+        <button type="button" id="clerkLogoutBtn" class="nav-btn-logout" title="Log Out">
+          <span>🚪</span> Logout
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Clerk Terminal Header Panel -->
+    <div class="clerk-header-panel">
+      <div class="terminal-title">
+        <h2>Counter Service & Dispatch Desk</h2>
+        <p>Locate physical storage bins, verify citizen identities, and process official card handovers</p>
+      </div>
+
+      <!-- Clerk Station Configuration -->
+      <div class="clerk-station-badge">
+        <div>
+          <div class="station-meta-label">Operator Clerk</div>
+          <select id="clerkSelect" style="background:transparent; color:#fbbf24; border:none; font-weight:700; font-size:0.95rem; cursor:pointer;">
+            <option value="CLK-ADAMA-01" selected>CLK-ADAMA-01 (Mulugeta)</option>
+            <option value="CLK-ADAMA-02">CLK-ADAMA-02 (Bethlehem)</option>
+            <option value="CLK-ADAMA-03">CLK-ADAMA-03 (Tariku)</option>
+            <option value="CLK-ADAMA-04">CLK-ADAMA-04 (Hanna)</option>
+          </select>
+        </div>
+        <div style="border-left: 1px solid rgba(255,255,255,0.2); padding-left: 1rem;">
+          <div class="station-meta-label">Current Counter</div>
+          <select id="deskSelect" style="background:transparent; color:#fbbf24; border:none; font-weight:700; font-size:0.95rem; cursor:pointer;">
+            <option value="Desk 1 (Priority & Accessibility Counter)">Desk 1 (Priority)</option>
+            <option value="Desk 2 (Counter Desk 2)" selected>Desk 2 (Counter Desk 2)</option>
+            <option value="Desk 3 (Counter Desk 3)">Desk 3 (Counter Desk 3)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Statistics Bar -->
+    <div class="stats-grid">
+      <div class="stat-card stat-ready">
+        <div>
+          <div class="stat-info-title">Ready in Storage</div>
+          <div class="stat-info-num" id="statReady">-</div>
+        </div>
+        <div class="stat-icon-wrap">📦</div>
+      </div>
+
+      <div class="stat-card stat-transit">
+        <div>
+          <div class="stat-info-title">In Transit</div>
+          <div class="stat-info-num" id="statTransit">-</div>
+        </div>
+        <div class="stat-icon-wrap">🚚</div>
+      </div>
+
+      <div class="stat-card stat-collected">
+        <div>
+          <div class="stat-info-title">Handed Over Today</div>
+          <div class="stat-info-num" id="statToday">-</div>
+        </div>
+        <div class="stat-icon-wrap">🤝</div>
+      </div>
+
+      <div class="stat-card stat-total">
+        <div>
+          <div class="stat-info-title">Total Registry</div>
+          <div class="stat-info-num" id="statTotal">-</div>
+        </div>
+        <div class="stat-icon-wrap">📑</div>
+      </div>
+    </div>
+
+    <!-- Main Clerk Interaction Grid -->
+    <div class="clerk-grid">
+      <!-- Left: Citizen Lookup & Quick Bin Finder -->
+      <div class="panel-card">
+        <div class="panel-header">
+          <h3><span>🔍</span> Citizen Retrieval & Bin Locator</h3>
+          <span style="font-size:0.8rem; color:#64748b;">Instant Search</span>
+        </div>
+
+        <div class="clerk-search-row">
+          <input
+            type="text"
+            id="clerkSearchInput"
+            class="clerk-input"
+            placeholder="Enter Fayda ID or Phone Number..."
+            autocomplete="off"
+          >
+          <button type="button" id="clerkSearchBtn" class="btn-secondary-action">
+            Fetch Card
+          </button>
+        </div>
+
+        <!-- Quick 1-click citizen selector -->
+        <div style="margin-bottom: 1.25rem;">
+          <div style="font-size: 0.75rem; font-weight: 700; color: #64748b; margin-bottom: 0.4rem; text-transform: uppercase;">
+            Quick Citizen Selection:
+          </div>
+          <div class="sample-pills" id="clerkSamplePills">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Active Citizen Retrieval & Bin Card -->
+        <div id="activeHandoverBox" class="active-handover-box">
+          <!-- Bin Locator Banner -->
+          <div class="bin-locator-banner">
+            <div class="bin-locator-title">PHYSICAL STORAGE BIN LOCATOR</div>
+            <div class="bin-locator-code" id="activeStorageBin">Shelf A / Box 04</div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <div>
+              <h4 id="activeCitizenName" style="font-size: 1.2rem; font-weight: 800; color: #0f172a;">-</h4>
+              <p id="activeFaydaId" style="font-family: monospace; color: #64748b; font-size: 0.85rem;">-</p>
+            </div>
+            <div>
+              <span id="activeStatusPill" class="status-pill ready">Ready for Collection</span>
+            </div>
+          </div>
+
+          <div class="details-grid" style="grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+            <div class="detail-box">
+              <div class="detail-box-label">Phone</div>
+              <div class="detail-box-value" id="activePhone" style="font-size: 0.9rem;">-</div>
+            </div>
+            <div class="detail-box">
+              <div class="detail-box-label">Age & DOB</div>
+              <div class="detail-box-value" id="activeDob" style="font-size: 0.9rem;">-</div>
+            </div>
+            <div class="detail-box">
+              <div class="detail-box-label">Assigned Desk</div>
+              <div class="detail-box-value" id="activeAssignedDesk" style="font-size: 0.85rem; color: #1d4ed8;">-</div>
+            </div>
+            <div class="detail-box">
+              <div class="detail-box-label">Arrival Timestamp</div>
+              <div class="detail-box-value" id="activeArrivedAt" style="font-size: 0.8rem;">-</div>
+            </div>
+          </div>
+
+          <!-- Handover Action Button -->
+          <button type="button" id="confirmHandoverBtn" class="handover-confirm-btn">
+            <span>✓ Confirm Handover & Issue Card</span>
+          </button>
+        </div>
+
+        <div id="clerkEmptyState" style="text-align:center; padding:2rem 1rem; color:#94a3b8;">
+          <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🗂️</div>
+          <p style="font-weight: 600;">Search or select a citizen above to reveal the physical storage bin and issue the card.</p>
+        </div>
+      </div>
+
+      <!-- Right: Running Completed Handovers (Audit Trail) -->
+      <div class="panel-card">
+        <div class="panel-header">
+          <h3><span>📜</span> Completed Handover Audit Log</h3>
+          <button type="button" id="refreshAuditBtn" class="sample-btn" style="font-size:0.75rem;">
+            🔄 Refresh
+          </button>
+        </div>
+
+        <div class="table-responsive" style="max-height: 480px; overflow-y: auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Time (UTC)</th>
+                <th>Citizen Name</th>
+                <th>Fayda ID</th>
+                <th>Desk</th>
+                <th>Clerk</th>
+              </tr>
+            </thead>
+            <tbody id="auditTableBody">
+              <tr>
+                <td colspan="5" style="text-align: center; color: #94a3b8; padding: 2rem;">Loading audit logs...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom: Master Branch Registry with Status Filtering -->
+    <div class="table-panel">
+      <div class="table-filter-bar">
+        <div>
+          <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--color-primary);">
+            Master Card Inventory & Status
+          </h3>
+          <p style="color: var(--text-muted); font-size: 0.85rem;">All registered cards stored at Adama Main Post Office</p>
+        </div>
+
+        <div class="filter-pills" id="statusFilterPills">
+          <button type="button" class="filter-pill active" data-status="All">All (<span id="countAll">0</span>)</button>
+          <button type="button" class="filter-pill" data-status="Ready for Collection">Ready (<span id="countReady">0</span>)</button>
+          <button type="button" class="filter-pill" data-status="In Transit">In Transit (<span id="countTransit">0</span>)</button>
+          <button type="button" class="filter-pill" data-status="Collected">Collected (<span id="countCollected">0</span>)</button>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Fayda ID</th>
+              <th>Citizen Name</th>
+              <th>Phone</th>
+              <th>Storage Bin</th>
+              <th>Status</th>
+              <th>Assigned Desk</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="inventoryTableBody">
+            <tr>
+              <td colspan="7" style="text-align:center; padding: 2rem; color: #94a3b8;">Loading inventory...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- Notification Toast Container -->
+  <div id="toastContainer" class="toast-container" aria-live="assertive"></div>
+
+  <script src="js/clerk.js"></script>
+</body>
+</html>
