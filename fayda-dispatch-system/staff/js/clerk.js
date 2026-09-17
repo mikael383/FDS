@@ -3,8 +3,8 @@
  * Handles storage bin physical retrieval, live handover issuing, running audit trail, and inventory management.
  */
 
-// API Base URL - handles both port 8000 and independent port (e.g. 8080)
-const API_BASE = window.location.port === '8000' 
+// API Base URL - points to central FastAPI backend on port 8000
+const API_BASE = (window.location.port === '8000' && window.location.hostname === '127.0.0.1') 
   ? '' 
   : 'http://127.0.0.1:8000';
 
