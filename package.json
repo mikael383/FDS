@@ -5,11 +5,11 @@
   "scripts": {
     "dev": "python launch_servers.py",
     "start": "python launch_servers.py",
-    "dev:backend": "python -m uvicorn main:app --app-dir fayda-dispatch-system/backend --host 127.0.0.1 --port 8000 --reload",
-    "dev:kiosk": "python -m http.server 3000 --directory fayda-dispatch-system/kiosk",
-    "dev:staff": "python -m http.server 4000 --directory fayda-dispatch-system/staff",
-    "seed": "python fayda-dispatch-system/backend/seed.py",
-    "test": "python fayda-dispatch-system/backend/test_dispatch.py"
+    "dev:backend": "python -m uvicorn main:app --app-dir backend --host 127.0.0.1 --port 8000 --reload",
+    "dev:kiosk": "python -m http.server 3000 --directory kiosk",
+    "dev:staff": "python -m http.server 4000 --directory staff",
+    "seed": "python backend/seed.py",
+    "test": "python backend/test_dispatch.py"
   },
   "keywords": [
     "fayda",

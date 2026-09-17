@@ -16,9 +16,9 @@ import socketserver
 import uvicorn
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-KIOSK_DIR = os.path.join(BASE_DIR, "fayda-dispatch-system", "kiosk")
-STAFF_DIR = os.path.join(BASE_DIR, "fayda-dispatch-system", "staff")
-BACKEND_DIR = os.path.join(BASE_DIR, "fayda-dispatch-system", "backend")
+KIOSK_DIR = os.path.join(BASE_DIR, "kiosk")
+STAFF_DIR = os.path.join(BASE_DIR, "staff")
+BACKEND_DIR = os.path.join(BASE_DIR, "backend")
 
 # Ensure backend path is on sys.path
 if BACKEND_DIR not in sys.path:
