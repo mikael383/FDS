@@ -7,7 +7,7 @@
     "start": "python launch_servers.py",
     "dev:backend": "python -m uvicorn main:app --app-dir fayda-dispatch-system/backend --host 127.0.0.1 --port 8000 --reload",
     "dev:kiosk": "python -m http.server 3000 --directory fayda-dispatch-system/kiosk",
-    "dev:staff": "python -m http.server 5000 --directory fayda-dispatch-system/staff",
+    "dev:staff": "python -m http.server 4000 --directory fayda-dispatch-system/staff",
     "seed": "python fayda-dispatch-system/backend/seed.py",
     "test": "python fayda-dispatch-system/backend/test_dispatch.py"
   },
