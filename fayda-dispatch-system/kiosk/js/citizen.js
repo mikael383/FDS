@@ -3,10 +3,10 @@
  * Handles tracking lookups, priority toggle, dynamic desk banner rendering, and visual state management.
  */
 
-// API Base URL - handles both relative paths (when served from FastAPI) and local dev
-const API_BASE = window.location.origin.includes('8000')
-  ? ''
-  : (window.location.origin.startsWith('http') ? '' : 'http://127.0.0.1:8000');
+// API Base URL - points to central FastAPI backend on port 8000
+const API_BASE = (window.location.port === '8000' && window.location.hostname === '127.0.0.1')
+  ? '' 
+  : 'http://127.0.0.1:8000';
 
 document.addEventListener('DOMContentLoaded', () => {
   const searchInput = document.getElementById('searchInput');
