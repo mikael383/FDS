@@ -391,6 +391,14 @@ body {
   transform: translateY(-1px);
 }
 
+.sample-btn.active {
+  background: #eff6ff;
+  border-color: var(--color-postal-blue);
+  color: var(--color-postal-blue);
+  box-shadow: 0 0 0 2px rgba(29, 78, 216, 0.35);
+  font-weight: 800;
+}
+
 .pill-tag {
   background: #e2e8f0;
   font-size: 0.65rem;

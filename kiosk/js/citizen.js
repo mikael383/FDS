@@ -31,6 +31,11 @@ document.addEventListener('DOMContentLoaded', () => {
   samplePills.addEventListener('click', (e) => {
     const btn = e.target.closest('.sample-btn');
     if (!btn) return;
+
+    // Highlight selected sample pill
+    document.querySelectorAll('.sample-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
     const id = btn.getAttribute('data-id');
     const prio = btn.getAttribute('data-prio') === 'true';
 
@@ -46,6 +51,15 @@ document.addEventListener('DOMContentLoaded', () => {
       searchInput.focus();
       return;
     }
+
+    // Sync active state on sample buttons matching query
+    document.querySelectorAll('.sample-btn').forEach(b => {
+      if (b.getAttribute('data-id') === rawQuery) {
+        b.classList.add('active');
+      } else {
+        b.classList.remove('active');
+      }
+    });
 
     const isPriority = priorityCheckbox.checked;
 
