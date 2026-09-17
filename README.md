@@ -9,7 +9,7 @@ An operational postal counter tracking, storage bin retrieval, and automated des
 ```
 ┌────────────────────────────────────────────────────────┐
 │ 🖥️ Citizen Public Kiosk                                │
-│ http://127.0.0.1:3000                                  │
+│ http://localhost:3000  (or http://127.0.0.1:3000)      │
 │ • Entrance lobby self-service kiosk                    │
 │ • Zero staff links or administrative data              │
 │ • Real-time counter desk routing (Desk 1, 2, or 3)     │
@@ -18,14 +18,14 @@ An operational postal counter tracking, storage bin retrieval, and automated des
                             ▼ REST API
 ┌────────────────────────────────────────────────────────┐
 │ ⚙️ Central Dispatch API & Database Engine               │
-│ http://127.0.0.1:8000  • Swagger: /docs                │
+│ http://localhost:8000  • Swagger: /docs                │
 │ • Dynamic routing rules, age & priority evaluation     │
 │ • Handover audit ledger & operational statistics       │
 └───────────────────────────▲────────────────────────────┘
                             │ REST API
 ┌───────────────────────────┴────────────────────────────┐
 │ 🔒 Postal Staff Counter Portal                         │
-│ http://127.0.0.1:4000                                  │
+│ http://localhost:4000  (or http://127.0.0.1:4000)      │
 │ • Employee login gateway (`index.html`)                │
 │ • Storage bin retrieval locator (`terminal.html`)      │
 │ • Live card handover confirmation & audit logging      │
@@ -92,9 +92,9 @@ npm run dev
 
 | Portal | URL | Audience | Description |
 | :--- | :--- | :--- | :--- |
-| **Citizen Public Kiosk** | `http://127.0.0.1:3000` | Citizens | Public counter desk lookup |
-| **Postal Staff Portal** | `http://127.0.0.1:4000` | Postal Staff | Employee login & counter terminal |
-| **Central Dispatch API** | `http://127.0.0.1:8000/docs` | Developers/API | Swagger API documentation |
+| **Citizen Public Kiosk** | `http://localhost:3000` | Citizens | Public counter desk lookup |
+| **Postal Staff Portal** | `http://localhost:4000` | Postal Staff | Employee login & counter terminal |
+| **Central Dispatch API** | `http://localhost:8000/docs` | Developers/API | Swagger API documentation |
 
 ### Staff Credentials
 - **Username**: `clerk` (or `clerk1`, `clerk2`, `admin`)
