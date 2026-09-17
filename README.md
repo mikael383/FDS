@@ -4,22 +4,55 @@ An operational postal counter tracking, storage bin retrieval, and automated des
 
 ---
 
+## 🏛️ System Architecture: Separated Domains
+
+The application is structured into two completely isolated frontend portals connecting to a central FastAPI backend:
+
+```
+┌────────────────────────────────────────────────────────┐
+│ 🖥️ Citizen Public Kiosk                                │
+│ http://127.0.0.1:3000                                  │
+│ • Entrance lobby self-service kiosk                    │
+│ • Zero staff links or administrative data              │
+│ • Real-time counter desk routing (Desk 1, 2, or 3)     │
+└───────────────────────────┬────────────────────────────┘
+                            │
+                            ▼ REST API
+┌────────────────────────────────────────────────────────┐
+│ ⚙️ Central Dispatch API & Database Engine               │
+│ http://127.0.0.1:8000  • Swagger: /docs                │
+│ • Routing engine, age & priority evaluation            │
+│ • Immutable handover audit ledger & statistics         │
+└───────────────────────────▲────────────────────────────┘
+                            │ REST API
+┌───────────────────────────┴────────────────────────────┐
+│ 🔒 Postal Staff Counter Portal                         │
+│ http://127.0.0.1:5000                                  │
+│ • Employee login gateway (shared branch credentials)   │
+│ • Storage bin retrieval locator (Shelf A / Box 04)     │
+│ • Live card handover confirmation & audit logging      │
+└────────────────────────────────────────────────────────┘
+```
+
+---
+
 ## 🚀 Key Features
 
 - **Dynamic Counter Desk Dispatch**:
   - ⚡ **Desk 1 (Priority & Accessibility Counter)**: Automatically routes senior citizens (Age $\ge$ 60), expectant mothers, and citizens requesting accessibility assistance.
   - 🏢 **Desk 2 (Counter Desk 2)**: Physical storage bin `Shelf A` cards.
   - 🏢 **Desk 3 (Counter Desk 3)**: Physical storage bin `Shelf B` cards.
-- **Citizen Self-Service Kiosk (`/`)**:
-  - High-visibility counter directions with interactive accessibility/priority toggle.
+- **Dedicated Citizen Kiosk App (`kiosk/` - Port 3000)**:
+  - Clean, high-visibility counter directions with accessibility toggle.
   - 1-Click quick testing presets for all branch workflows.
-- **Staff Counter Terminal (`/clerk.html`)**:
-  - Secure authentication barrier (`/login.html`) with shared branch credentials.
-  - Physical storage locator cards highlighting exact shelf and box coordinates (`Shelf A / Box 04`).
-  - Live handover confirmation with real-time audit logging and daily counters.
-- **FastAPI RESTful Backend**:
+- **Dedicated Staff Portal (`staff/` - Port 5000)**:
+  - Employee login gateway (`index.html`) with shared credentials and workstation selection.
+  - Storage bin locator (`terminal.html`) with visual bin tags (`Shelf A / Box 04`).
+  - Master registry browser with 1-click **Select** shortcuts.
+  - Immutable handover audit trail with operator clerk logging.
+- **Central FastAPI Backend (`backend/` - Port 8000)**:
   - SQLite database with SQLAlchemy ORM.
-  - Comprehensive automated test suite with 100% test pass rate.
+  - Comprehensive automated test suite with 100% pass rate.
   - Interactive OpenAPI Swagger docs at `/docs`.
 
 ---
@@ -34,17 +67,17 @@ fayda-dispatch-system/
 │   ├── schemas.py          # Pydantic request and response schemas
 │   ├── seed.py             # Database seed data populator
 │   ├── test_dispatch.py    # Automated test suite (9 test cases)
-│   ├── main.py             # FastAPI routing, auth, static file mounts
+│   ├── main.py             # FastAPI routing, auth, and API endpoints
 │   └── requirements.txt    # Backend dependencies
-└── frontend/
-    ├── index.html          # Public Citizen Self-Service Kiosk
-    ├── login.html          # Postal Clerk Authentication Portal
-    ├── clerk.html          # Counter Terminal & Storage Bin Retrieval
-    ├── css/
-    │   └── style.css       # Design system & responsive layout styles
-    └── js/
-        ├── citizen.js      # Citizen tracking lookup & desk dispatch logic
-        └── clerk.js        # Counter operations, handover issuing, audit logs
+├── kiosk/                  # Dedicated Citizen Public Kiosk (Port 3000)
+│   ├── index.html          # Public self-service kiosk UI
+│   ├── css/style.css
+│   └── js/citizen.js       # Kiosk lookup and desk dispatch logic
+└── staff/                  # Dedicated Postal Staff Portal (Port 5000)
+    ├── index.html          # Staff authentication login
+    ├── terminal.html       # Counter service & bin locator terminal
+    ├── css/style.css
+    └── js/clerk.js         # Handover issuing, bin retrieval, audit logs
 ```
 
 ---
@@ -57,32 +90,34 @@ cd fayda-dispatch-system/backend
 pip install -r requirements.txt
 ```
 
-### 2. Seed Database
+### 2. Seed Sample Database
 ```bash
-python seed.py
+npm run seed
+# or: python fayda-dispatch-system/backend/seed.py
 ```
 
 ### 3. Run Automated Tests
 ```bash
-python test_dispatch.py
+npm test
+# or: python fayda-dispatch-system/backend/test_dispatch.py
 ```
 
-### 4. Start the Application
+### 4. Start All Services (Multi-Domain)
 ```bash
-python -m uvicorn main:app --host 127.0.0.1 --port 8000 --reload
+npm run dev
+# or: python launch_servers.py
 ```
 
 ---
 
 ## 🌐 Application Endpoints
 
-| Portal / Resource | URL | Description |
-| :--- | :--- | :--- |
-| **Citizen Kiosk** | `http://127.0.0.1:8000/` | Public self-service desk lookup |
-| **Clerk Login** | `http://127.0.0.1:8000/login.html` | Postal staff authentication |
-| **Clerk Terminal** | `http://127.0.0.1:8000/clerk.html` | Counter handover & inventory terminal |
-| **API Documentation** | `http://127.0.0.1:8000/docs` | Interactive Swagger UI |
+| Portal | URL | Audience | Description |
+| :--- | :--- | :--- | :--- |
+| **Citizen Public Kiosk** | `http://127.0.0.1:3000` | Citizens | Public counter desk lookup |
+| **Postal Staff Portal** | `http://127.0.0.1:5000` | Postal Staff | Employee login & counter terminal |
+| **Central Dispatch API** | `http://127.0.0.1:8000/docs` | Developers/API | Swagger API documentation |
 
-### Clerk Default Credentials
+### Staff Credentials
 - **Username**: `clerk` (or `clerk1`, `clerk2`, `admin`)
 - **Password**: `fayda2026` (or `clerk123`)

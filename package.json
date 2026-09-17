@@ -1,0 +1,24 @@
+{
+  "name": "fayda-dispatch-system",
+  "version": "1.0.0",
+  "description": "Fayda National ID Postal Tracking & Desk Dispatch System",
+  "scripts": {
+    "dev": "python launch_servers.py",
+    "start": "python launch_servers.py",
+    "dev:backend": "python -m uvicorn main:app --app-dir fayda-dispatch-system/backend --host 127.0.0.1 --port 8000 --reload",
+    "dev:kiosk": "python -m http.server 3000 --directory fayda-dispatch-system/kiosk",
+    "dev:staff": "python -m http.server 5000 --directory fayda-dispatch-system/staff",
+    "seed": "python fayda-dispatch-system/backend/seed.py",
+    "test": "python fayda-dispatch-system/backend/test_dispatch.py"
+  },
+  "keywords": [
+    "fayda",
+    "postal",
+    "dispatch",
+    "fastapi",
+    "kiosk",
+    "clerk"
+  ],
+  "author": "FDS Team",
+  "license": "MIT"
+}

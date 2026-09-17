@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fayda ID Collection Kiosk | Adama Main Post Office</title>
+  <meta name="description" content="Official public self-service kiosk for Fayda National ID collection tracking and automated counter desk dispatch.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Public Kiosk Header (Strictly Citizen-Facing) -->
+  <header class="main-header">
+    <div class="header-container">
+      <div class="brand-group">
+        <div class="brand-emblem" aria-hidden="true">🇪🇹</div>
+        <div class="brand-titles">
+          <h1>
+            Fayda National ID Dispatch
+            <span class="badge-fayda">Public Kiosk</span>
+          </h1>
+          <p>Adama Main Post Office • Citizen Self-Service Terminal</p>
+        </div>
+      </div>
+      <div class="nav-links">
+        <span class="kiosk-status-badge">
+          <span class="pulse-dot"></span> Lobby Kiosk #01 • Online
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <main class="kiosk-container">
+    <!-- Citizen Query Card -->
+    <section class="search-card" aria-labelledby="kioskTitle">
+      <div class="kiosk-heading">
+        <h2 id="kioskTitle">National ID Collection & Desk Dispatch</h2>
+        <p>Enter your 16-digit Fayda ID or registered mobile phone number to find your collection counter</p>
+      </div>
+
+      <form id="trackForm" class="search-form" onsubmit="return false;">
+        <div class="input-wrapper">
+          <span class="input-icon" aria-hidden="true">🔍</span>
+          <input
+            type="text"
+            id="searchInput"
+            class="kiosk-input"
+            placeholder="e.g. FAN-1029-8472-9901 or +251911223344"
+            required
+            autocomplete="off"
+            autofocus
+            aria-label="Fayda ID or Phone Number"
+          >
+        </div>
+
+        <!-- Priority Accessibility Checkbox -->
+        <label class="priority-toggle-box" for="priorityCheckbox">
+          <input type="checkbox" id="priorityCheckbox" class="priority-checkbox">
+          <div class="priority-label">
+            <span class="priority-title">♿ Request Priority Desk Access</span>
+            <span class="priority-subtext">For expectant mothers, senior citizens, and persons with reduced mobility</span>
+          </div>
+        </label>
+
+        <button type="submit" id="trackBtn" class="btn-primary-action">
+          <span>Check Status & Get Counter Desk</span>
+          <span aria-hidden="true">➔</span>
+        </button>
+      </form>
+
+      <!-- 1-Click Quick Sample Testing Pills -->
+      <div class="sample-bar">
+        <div class="sample-bar-title">
+          <span>⚡ Demo Quick-Fill Samples:</span>
+        </div>
+        <div class="sample-pills" id="samplePills">
+          <button type="button" class="sample-btn" data-id="FAN-1029-8472-9901" data-prio="false">
+            <span>Abebe (Shelf A)</span>
+            <span class="pill-tag">Desk 2</span>
+          </button>
+          <button type="button" class="sample-btn" data-id="FAN-3849-5721-6623" data-prio="false">
+            <span>Selamawit (Shelf B)</span>
+            <span class="pill-tag">Desk 3</span>
+          </button>
+          <button type="button" class="sample-btn" data-id="FAN-7734-1920-4411" data-prio="false">
+            <span>Wro. Aster (Age 68)</span>
+            <span class="pill-tag">Senior Desk 1</span>
+          </button>
+          <button type="button" class="sample-btn" data-id="FAN-9921-6634-1188" data-prio="false">
+            <span>Dawit</span>
+            <span class="pill-tag">In Transit</span>
+          </button>
+          <button type="button" class="sample-btn" data-id="FAN-5512-8839-2244" data-prio="false">
+            <span>Tigist</span>
+            <span class="pill-tag">Collected</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dynamic Tracking & Desk Dispatch Result Section -->
+    <section id="resultsSection" class="results-area" aria-live="polite">
+      <!-- Dynamically filled via js/citizen.js -->
+    </section>
+  </main>
+
+  <!-- Notification Toast Container -->
+  <div id="toastContainer" class="toast-container" aria-live="assertive"></div>
+
+  <script src="js/citizen.js"></script>
+</body>
+</html>

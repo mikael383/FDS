@@ -312,9 +312,21 @@ def clerk_login(credentials: schemas.LoginRequest):
     )
 
 
-# Locate frontend directory relative to this file
-FRONTEND_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "frontend"))
+# Locate directories relative to this file
+BACKEND_BASE = os.path.dirname(__file__)
+FRONTEND_DIR = os.path.abspath(os.path.join(BACKEND_BASE, "..", "frontend"))
+KIOSK_DIR = os.path.abspath(os.path.join(BACKEND_BASE, "..", "kiosk"))
+STAFF_DIR = os.path.abspath(os.path.join(BACKEND_BASE, "..", "staff"))
 
+# 1. Mount Dedicated Kiosk App
+if os.path.exists(KIOSK_DIR):
+    app.mount("/kiosk", StaticFiles(directory=KIOSK_DIR, html=True), name="kiosk")
+
+# 2. Mount Dedicated Staff Portal
+if os.path.exists(STAFF_DIR):
+    app.mount("/staff", StaticFiles(directory=STAFF_DIR, html=True), name="staff")
+
+# 3. Mount Fallback Frontend Static Assets
 if os.path.exists(FRONTEND_DIR):
     css_dir = os.path.join(FRONTEND_DIR, "css")
     js_dir = os.path.join(FRONTEND_DIR, "js")
@@ -326,19 +338,30 @@ if os.path.exists(FRONTEND_DIR):
 
     @app.get("/", include_in_schema=False)
     def serve_kiosk():
+        if os.path.exists(os.path.join(KIOSK_DIR, "index.html")):
+            return FileResponse(os.path.join(KIOSK_DIR, "index.html"))
         return FileResponse(os.path.join(FRONTEND_DIR, "index.html"))
 
     @app.get("/index.html", include_in_schema=False)
     def serve_kiosk_html():
+        if os.path.exists(os.path.join(KIOSK_DIR, "index.html")):
+            return FileResponse(os.path.join(KIOSK_DIR, "index.html"))
         return FileResponse(os.path.join(FRONTEND_DIR, "index.html"))
 
     @app.get("/login", include_in_schema=False)
     @app.get("/login.html", include_in_schema=False)
     def serve_login():
+        if os.path.exists(os.path.join(STAFF_DIR, "index.html")):
+            return FileResponse(os.path.join(STAFF_DIR, "index.html"))
         return FileResponse(os.path.join(FRONTEND_DIR, "login.html"))
 
     @app.get("/clerk", include_in_schema=False)
     @app.get("/clerk.html", include_in_schema=False)
+    @app.get("/terminal", include_in_schema=False)
+    @app.get("/terminal.html", include_in_schema=False)
     def serve_clerk():
+        if os.path.exists(os.path.join(STAFF_DIR, "terminal.html")):
+            return FileResponse(os.path.join(STAFF_DIR, "terminal.html"))
         return FileResponse(os.path.join(FRONTEND_DIR, "clerk.html"))
+
 
