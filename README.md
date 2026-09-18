@@ -105,7 +105,7 @@ Authentication is strictly restricted to registered branch personnel:
 | **Bethlehem Tadesse** | `bethlehem` (or `clerk1`) | Desk 1 (Priority Counter) | Priority & Accessibility Officer | `fayda2026` |
 | **Tariku Alemu** | `tariku` (or `clerk3`) | Desk 3 (Counter Desk 3) | Counter Dispatch Clerk (Shelf B) | `fayda2026` |
 | **Hanna Girmay** | `hanna` (or `clerk4`) | Desk 1 (Priority Counter) | Counter Service Clerk | `fayda2026` |
-| **Dawit Haile** | `admin` | Desk 1 (Priority Counter) | Branch Postal Supervisor | `fayda2026` |
+| **Mikael** | `mikael` (or `admin`) | Desk 1 (Priority Counter) | Branch Postal Supervisor & Administrator | `fayda2026` |
 
 ---
 

@@ -306,13 +306,20 @@ AUTHORIZED_STAFF = {
         "role": "Counter Service Clerk",
         "passwords": ["fayda2026", "hanna123", "clerk123"]
     },
-    # 5. Supervisor Dawit Haile - Branch Admin
-    "admin": {
-        "full_name": "Dawit Haile",
+    # 5. Supervisor Mikael - Branch Admin
+    "mikael": {
+        "full_name": "Mikael",
         "clerk_id": "CLK-ADMIN-01",
         "default_desk": "Desk 1 (Priority & Accessibility Counter)",
-        "role": "Branch Postal Supervisor",
-        "passwords": ["fayda2026", "admin123"]
+        "role": "Branch Postal Supervisor & Administrator",
+        "passwords": ["fayda2026", "mikael123", "admin123", "clerk123"]
+    },
+    "admin": {
+        "full_name": "Mikael",
+        "clerk_id": "CLK-ADMIN-01",
+        "default_desk": "Desk 1 (Priority & Accessibility Counter)",
+        "role": "Branch Postal Supervisor & Administrator",
+        "passwords": ["fayda2026", "mikael123", "admin123", "clerk123"]
     },
     # Convenient aliases for branch workstations:
     "clerk": {
@@ -358,6 +365,14 @@ def get_authorized_staff():
     """Returns official registered postal personnel roster for counter login."""
     return [
         {
+            "username": "mikael",
+            "name": "Supervisor Mikael",
+            "clerk_id": "CLK-ADMIN-01",
+            "desk": "Desk 1 (Priority & Accessibility Counter)",
+            "role": "Branch Postal Supervisor & Administrator",
+            "avatar": "🛡️"
+        },
+        {
             "username": "mulugeta",
             "name": "Mulugeta Kebede",
             "clerk_id": "CLK-ADAMA-01",
@@ -388,14 +403,6 @@ def get_authorized_staff():
             "desk": "Desk 1 (Priority & Accessibility Counter)",
             "role": "Counter Service Clerk",
             "avatar": "👩🏾‍💼"
-        },
-        {
-            "username": "admin",
-            "name": "Dawit Haile",
-            "clerk_id": "CLK-ADMIN-01",
-            "desk": "Desk 1 (Priority & Accessibility Counter)",
-            "role": "Branch Postal Supervisor",
-            "avatar": "🛡️"
         }
     ]
 
@@ -405,7 +412,7 @@ def clerk_login(credentials: schemas.LoginRequest):
     """
     Restricted Staff Authentication Endpoint.
     Only recognized postal personnel (by staff name or clerk ID) can access the Counter Terminal.
-    Authorized names: 'mulugeta', 'bethlehem', 'tariku', 'hanna', 'admin' (or 'clerk1'-'clerk4').
+    Authorized names: 'mikael', 'mulugeta', 'bethlehem', 'tariku', 'hanna', 'admin' (or 'clerk1'-'clerk4').
     """
     username_clean = credentials.username.strip().lower()
 
@@ -417,7 +424,7 @@ def clerk_login(credentials: schemas.LoginRequest):
 
     # 1. Enforce Staff Name Restriction
     if username_clean not in AUTHORIZED_STAFF:
-        valid_staff_names = "mulugeta, bethlehem, tariku, hanna, admin"
+        valid_staff_names = "mikael, mulugeta, bethlehem, tariku, hanna (or 'admin')"
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail=f"Access Denied: '{credentials.username.strip()}' is not a registered branch postal staff member. Access is restricted to authorized officers: {valid_staff_names}."
