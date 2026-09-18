@@ -3,10 +3,12 @@
  * Handles storage bin physical retrieval, live handover issuing, running audit trail, and inventory management.
  */
 
-// API Base URL - points to localhost backend on port 8000
-const API_BASE = window.location.port === '8000'
-  ? ''
-  : (window.location.hostname === '127.0.0.1' ? 'http://127.0.0.1:8000' : 'http://localhost:8000');
+// Dynamic API Base:
+// - In local separate-port mode (port 3000 / 4000), target localhost:8000
+// - On Render / production (or unified port 8000), use relative path ''
+const API_BASE = (window.location.port === '3000' || window.location.port === '4000')
+  ? (window.location.hostname === '127.0.0.1' ? 'http://127.0.0.1:8000' : 'http://localhost:8000')
+  : '';
 
 let currentActiveCard = null;
 let currentFilterStatus = 'All';

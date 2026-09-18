@@ -99,3 +99,32 @@ npm run dev
 ### Staff Credentials
 - **Username**: `clerk` (or `clerk1`, `clerk2`, `admin`)
 - **Password**: `fayda2026` (or `clerk123`)
+
+---
+
+## 🚀 Deploy to Render (Cloud Hosting)
+
+The repository includes a ready-to-use Render Blueprint (`render.yaml`).
+
+### Option A: 1-Click / Blueprint Deploy
+1. Sign in to [Render.com](https://dashboard.render.com/).
+2. Click **New +** → **Blueprint**.
+3. Select your repository `https://github.com/mikael383/FDS`.
+4. Render automatically reads `render.yaml` and deploys your Web Service!
+
+### Option B: Manual Web Service Setup
+1. On [Render Dashboard](https://dashboard.render.com/), click **New +** → **Web Service**.
+2. Connect your GitHub repository `FDS`.
+3. Configure the following settings:
+   - **Language**: `Python 3`
+   - **Branch**: `main`
+   - **Region**: Any (e.g., Frankfurt or Oregon)
+   - **Build Command**: `pip install -r requirements.txt && python backend/seed.py`
+   - **Start Command**: `python backend/seed.py && python -m uvicorn main:app --app-dir backend --host 0.0.0.0 --port $PORT`
+   - **Plan**: `Free`
+4. Click **Create Web Service**.
+
+### Cloud Live Endpoints (Once Deployed)
+- **Citizen Kiosk**: `https://<your-subdomain>.onrender.com/` (or `/kiosk`)
+- **Staff Counter Portal**: `https://<your-subdomain>.onrender.com/staff/`
+- **Interactive API Docs**: `https://<your-subdomain>.onrender.com/docs`
