@@ -101,11 +101,10 @@ Authentication is strictly restricted to registered branch personnel:
 
 | Staff Name | Username | Assigned Counter | Role | Password |
 | :--- | :--- | :--- | :--- | :--- |
-| **Mulugeta Kebede** | `mulugeta` (or `clerk2`) | Desk 2 (Counter Desk 2) | Senior Counter Officer (Shelf A) | `fayda2026` |
-| **Bethlehem Tadesse** | `bethlehem` (or `clerk1`) | Desk 1 (Priority Counter) | Priority & Accessibility Officer | `fayda2026` |
-| **Tariku Alemu** | `tariku` (or `clerk3`) | Desk 3 (Counter Desk 3) | Counter Dispatch Clerk (Shelf B) | `fayda2026` |
-| **Hanna Girmay** | `hanna` (or `clerk4`) | Desk 1 (Priority Counter) | Counter Service Clerk | `fayda2026` |
 | **Mikael** | `mikael` (or `admin`) | Desk 1 (Priority Counter) | Branch Postal Supervisor & Administrator | `fayda2026` |
+| **Bethlehem Tadesse** | `bethlehem` (or `clerk1`) | Desk 1 (Priority Counter) | Priority & Accessibility Officer | `fayda2026` |
+| **Mulugeta Kebede** | `mulugeta` (or `clerk2`) | Desk 2 (Counter Desk 2) | Senior Counter Officer (Shelf A) | `fayda2026` |
+| **Tariku Alemu** | `tariku` (or `clerk3`) | Desk 3 (Counter Desk 3) | Counter Dispatch Clerk (Shelf B) | `fayda2026` |
 
 ---
 

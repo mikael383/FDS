@@ -298,15 +298,7 @@ AUTHORIZED_STAFF = {
         "role": "Counter Dispatch Clerk (Shelf B)",
         "passwords": ["fayda2026", "tariku123", "clerk123"]
     },
-    # 4. Officer Hanna Girmay - Counter Clerk
-    "hanna": {
-        "full_name": "Hanna Girmay",
-        "clerk_id": "CLK-ADAMA-04",
-        "default_desk": "Desk 1 (Priority & Accessibility Counter)",
-        "role": "Counter Service Clerk",
-        "passwords": ["fayda2026", "hanna123", "clerk123"]
-    },
-    # 5. Supervisor Mikael - Branch Admin
+    # 4. Supervisor Mikael - Branch Admin
     "mikael": {
         "full_name": "Mikael",
         "clerk_id": "CLK-ADMIN-01",
@@ -349,13 +341,6 @@ AUTHORIZED_STAFF = {
         "default_desk": "Desk 3 (Counter Desk 3)",
         "role": "Counter Officer",
         "passwords": ["fayda2026", "clerk123"]
-    },
-    "clerk4": {
-        "full_name": "Hanna Girmay",
-        "clerk_id": "CLK-ADAMA-04",
-        "default_desk": "Desk 1 (Priority & Accessibility Counter)",
-        "role": "Counter Officer",
-        "passwords": ["fayda2026", "clerk123"]
     }
 }
 
@@ -395,14 +380,6 @@ def get_authorized_staff():
             "desk": "Desk 3 (Counter Desk 3)",
             "role": "Counter Dispatch Clerk (Shelf B)",
             "avatar": "👨🏾‍💼"
-        },
-        {
-            "username": "hanna",
-            "name": "Hanna Girmay",
-            "clerk_id": "CLK-ADAMA-04",
-            "desk": "Desk 1 (Priority & Accessibility Counter)",
-            "role": "Counter Service Clerk",
-            "avatar": "👩🏾‍💼"
         }
     ]
 
@@ -412,7 +389,7 @@ def clerk_login(credentials: schemas.LoginRequest):
     """
     Restricted Staff Authentication Endpoint.
     Only recognized postal personnel (by staff name or clerk ID) can access the Counter Terminal.
-    Authorized names: 'mikael', 'mulugeta', 'bethlehem', 'tariku', 'hanna', 'admin' (or 'clerk1'-'clerk4').
+    Authorized names: 'mikael', 'mulugeta', 'bethlehem', 'tariku', 'admin' (or 'clerk1'-'clerk3').
     """
     username_clean = credentials.username.strip().lower()
 
@@ -424,7 +401,7 @@ def clerk_login(credentials: schemas.LoginRequest):
 
     # 1. Enforce Staff Name Restriction
     if username_clean not in AUTHORIZED_STAFF:
-        valid_staff_names = "mikael, mulugeta, bethlehem, tariku, hanna (or 'admin')"
+        valid_staff_names = "mikael, mulugeta, bethlehem, tariku (or 'admin')"
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail=f"Access Denied: '{credentials.username.strip()}' is not a registered branch postal staff member. Access is restricted to authorized officers: {valid_staff_names}."
