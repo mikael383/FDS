@@ -272,34 +272,172 @@ def get_sample_citizens(db: Session = Depends(get_db)):
     ]
 
 
+# Official Authorized Postal Staff Personnel Registry
+AUTHORIZED_STAFF = {
+    # 1. Officer Mulugeta Kebede - Shelf A Counter (Desk 2)
+    "mulugeta": {
+        "full_name": "Mulugeta Kebede",
+        "clerk_id": "CLK-ADAMA-01",
+        "default_desk": "Desk 2 (Counter Desk 2)",
+        "role": "Senior Counter Officer (Shelf A)",
+        "passwords": ["fayda2026", "mulugeta123", "clerk123"]
+    },
+    # 2. Officer Bethlehem Tadesse - Priority Counter (Desk 1)
+    "bethlehem": {
+        "full_name": "Bethlehem Tadesse",
+        "clerk_id": "CLK-ADAMA-02",
+        "default_desk": "Desk 1 (Priority & Accessibility Counter)",
+        "role": "Accessibility & Senior Officer",
+        "passwords": ["fayda2026", "bethlehem123", "clerk123"]
+    },
+    # 3. Officer Tariku Alemu - Shelf B Counter (Desk 3)
+    "tariku": {
+        "full_name": "Tariku Alemu",
+        "clerk_id": "CLK-ADAMA-03",
+        "default_desk": "Desk 3 (Counter Desk 3)",
+        "role": "Counter Dispatch Clerk (Shelf B)",
+        "passwords": ["fayda2026", "tariku123", "clerk123"]
+    },
+    # 4. Officer Hanna Girmay - Counter Clerk
+    "hanna": {
+        "full_name": "Hanna Girmay",
+        "clerk_id": "CLK-ADAMA-04",
+        "default_desk": "Desk 1 (Priority & Accessibility Counter)",
+        "role": "Counter Service Clerk",
+        "passwords": ["fayda2026", "hanna123", "clerk123"]
+    },
+    # 5. Supervisor Dawit Haile - Branch Admin
+    "admin": {
+        "full_name": "Dawit Haile",
+        "clerk_id": "CLK-ADMIN-01",
+        "default_desk": "Desk 1 (Priority & Accessibility Counter)",
+        "role": "Branch Postal Supervisor",
+        "passwords": ["fayda2026", "admin123"]
+    },
+    # Convenient aliases for branch workstations:
+    "clerk": {
+        "full_name": "Mulugeta Kebede",
+        "clerk_id": "CLK-ADAMA-01",
+        "default_desk": "Desk 2 (Counter Desk 2)",
+        "role": "Senior Counter Officer",
+        "passwords": ["fayda2026", "clerk123"]
+    },
+    "clerk1": {
+        "full_name": "Bethlehem Tadesse",
+        "clerk_id": "CLK-ADAMA-02",
+        "default_desk": "Desk 1 (Priority & Accessibility Counter)",
+        "role": "Accessibility Officer",
+        "passwords": ["fayda2026", "clerk123"]
+    },
+    "clerk2": {
+        "full_name": "Mulugeta Kebede",
+        "clerk_id": "CLK-ADAMA-01",
+        "default_desk": "Desk 2 (Counter Desk 2)",
+        "role": "Counter Officer",
+        "passwords": ["fayda2026", "clerk123"]
+    },
+    "clerk3": {
+        "full_name": "Tariku Alemu",
+        "clerk_id": "CLK-ADAMA-03",
+        "default_desk": "Desk 3 (Counter Desk 3)",
+        "role": "Counter Officer",
+        "passwords": ["fayda2026", "clerk123"]
+    },
+    "clerk4": {
+        "full_name": "Hanna Girmay",
+        "clerk_id": "CLK-ADAMA-04",
+        "default_desk": "Desk 1 (Priority & Accessibility Counter)",
+        "role": "Counter Officer",
+        "passwords": ["fayda2026", "clerk123"]
+    }
+}
+
+
+@app.get("/api/v1/auth/staff-list")
+def get_authorized_staff():
+    """Returns official registered postal personnel roster for counter login."""
+    return [
+        {
+            "username": "mulugeta",
+            "name": "Mulugeta Kebede",
+            "clerk_id": "CLK-ADAMA-01",
+            "desk": "Desk 2 (Counter Desk 2)",
+            "role": "Senior Counter Officer (Shelf A)",
+            "avatar": "👨🏾‍💼"
+        },
+        {
+            "username": "bethlehem",
+            "name": "Bethlehem Tadesse",
+            "clerk_id": "CLK-ADAMA-02",
+            "desk": "Desk 1 (Priority & Accessibility Counter)",
+            "role": "Priority & Accessibility Officer",
+            "avatar": "👩🏾‍💼"
+        },
+        {
+            "username": "tariku",
+            "name": "Tariku Alemu",
+            "clerk_id": "CLK-ADAMA-03",
+            "desk": "Desk 3 (Counter Desk 3)",
+            "role": "Counter Dispatch Clerk (Shelf B)",
+            "avatar": "👨🏾‍💼"
+        },
+        {
+            "username": "hanna",
+            "name": "Hanna Girmay",
+            "clerk_id": "CLK-ADAMA-04",
+            "desk": "Desk 1 (Priority & Accessibility Counter)",
+            "role": "Counter Service Clerk",
+            "avatar": "👩🏾‍💼"
+        },
+        {
+            "username": "admin",
+            "name": "Dawit Haile",
+            "clerk_id": "CLK-ADMIN-01",
+            "desk": "Desk 1 (Priority & Accessibility Counter)",
+            "role": "Branch Postal Supervisor",
+            "avatar": "🛡️"
+        }
+    ]
+
+
 @app.post("/api/v1/auth/login", response_model=schemas.LoginResponse)
 def clerk_login(credentials: schemas.LoginRequest):
     """
-    Clerk Authentication Endpoint.
-    Validates shared credentials for all desk clerks across the branch.
-    Default valid passwords: 'fayda2026' or 'clerk123'
+    Restricted Staff Authentication Endpoint.
+    Only recognized postal personnel (by staff name or clerk ID) can access the Counter Terminal.
+    Authorized names: 'mulugeta', 'bethlehem', 'tariku', 'hanna', 'admin' (or 'clerk1'-'clerk4').
     """
-    valid_passwords = ["fayda2026", "clerk123", "admin123"]
     username_clean = credentials.username.strip().lower()
-
-    if credentials.password.strip() not in valid_passwords:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid Postal Staff password. Please check your credentials."
-        )
 
     if not username_clean:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Username / Staff ID cannot be blank."
+            detail="Staff username cannot be blank."
         )
 
-    # Derive clerk display name and ID
-    clerk_id = f"CLK-{username_clean.upper()}"
-    display_name = f"Officer {credentials.username.strip().capitalize()}"
-    selected_desk = credentials.desk or "Desk 1 (Priority & Accessibility Counter)"
+    # 1. Enforce Staff Name Restriction
+    if username_clean not in AUTHORIZED_STAFF:
+        valid_staff_names = "mulugeta, bethlehem, tariku, hanna, admin"
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=f"Access Denied: '{credentials.username.strip()}' is not a registered branch postal staff member. Access is restricted to authorized officers: {valid_staff_names}."
+        )
 
-    # Simple session token
+    staff_info = AUTHORIZED_STAFF[username_clean]
+
+    # 2. Enforce Password Check
+    if credentials.password.strip() not in staff_info["passwords"]:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=f"Invalid password for {staff_info['full_name']}. Please enter the correct staff password (default: 'fayda2026')."
+        )
+
+    # Derive clerk details from official roster
+    clerk_id = staff_info["clerk_id"]
+    display_name = f"Officer {staff_info['full_name']}"
+    selected_desk = credentials.desk or staff_info["default_desk"]
+
+    # Secure session token
     token = f"fayda_auth_{username_clean}_{datetime.datetime.now().strftime('%Y%m%d%H%M%S')}"
 
     return schemas.LoginResponse(

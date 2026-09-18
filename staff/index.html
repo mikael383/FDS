@@ -44,11 +44,12 @@
             type="text" 
             id="usernameInput" 
             class="form-input" 
-            placeholder="e.g. clerk, clerk1, admin" 
-            value="clerk2" 
+            placeholder="e.g. mulugeta, bethlehem, tariku, hanna, admin" 
+            value="mulugeta" 
             required
             autocomplete="username"
           >
+          <span class="input-hint">Restricted to authorized staff: <code>mulugeta</code>, <code>bethlehem</code>, <code>tariku</code>, <code>hanna</code>, <code>admin</code></span>
         </div>
 
         <!-- Password Input with Show/Hide Toggle -->
@@ -70,7 +71,7 @@
               👁️
             </button>
           </div>
-          <span class="input-hint">Branch shared default: <code>fayda2026</code> or <code>clerk123</code></span>
+          <span class="input-hint">Staff default password: <code>fayda2026</code></span>
         </div>
 
         <!-- Workstation Counter Selection -->
@@ -94,38 +95,46 @@
       <!-- 1-Click Interactive Operator Profiles -->
       <div class="operator-preset-section">
         <div class="operator-preset-title">
-          <span>⚡ Fast 1-Click Operator Presets:</span>
+          <span>⚡ Select Authorized Postal Staff Member:</span>
         </div>
         <div class="operator-preset-grid">
-          <button type="button" class="operator-card-btn active" data-clerk="clerk2" data-pass="fayda2026" data-desk="Desk 2 (Counter Desk 2)">
+          <button type="button" class="operator-card-btn active" data-clerk="mulugeta" data-pass="fayda2026" data-desk="Desk 2 (Counter Desk 2)">
             <span class="operator-card-avatar">👨🏾‍💼</span>
             <div>
-              <div class="operator-card-name">Mulugeta K.</div>
+              <div class="operator-card-name">Mulugeta Kebede</div>
               <div class="operator-card-desk">Desk 2 (Shelf A)</div>
             </div>
           </button>
 
-          <button type="button" class="operator-card-btn" data-clerk="clerk1" data-pass="fayda2026" data-desk="Desk 1 (Priority & Accessibility Counter)">
+          <button type="button" class="operator-card-btn" data-clerk="bethlehem" data-pass="fayda2026" data-desk="Desk 1 (Priority & Accessibility Counter)">
             <span class="operator-card-avatar">👩🏾‍💼</span>
             <div>
-              <div class="operator-card-name">Bethlehem T.</div>
+              <div class="operator-card-name">Bethlehem Tadesse</div>
               <div class="operator-card-desk">Desk 1 (Priority)</div>
             </div>
           </button>
 
-          <button type="button" class="operator-card-btn" data-clerk="clerk3" data-pass="fayda2026" data-desk="Desk 3 (Counter Desk 3)">
+          <button type="button" class="operator-card-btn" data-clerk="tariku" data-pass="fayda2026" data-desk="Desk 3 (Counter Desk 3)">
             <span class="operator-card-avatar">👨🏾‍💼</span>
             <div>
-              <div class="operator-card-name">Tariku A.</div>
+              <div class="operator-card-name">Tariku Alemu</div>
               <div class="operator-card-desk">Desk 3 (Shelf B)</div>
             </div>
           </button>
 
-          <button type="button" class="operator-card-btn" data-clerk="admin" data-pass="fayda2026" data-desk="Desk 1 (Priority & Accessibility Counter)">
+          <button type="button" class="operator-card-btn" data-clerk="hanna" data-pass="fayda2026" data-desk="Desk 1 (Priority & Accessibility Counter)">
+            <span class="operator-card-avatar">👩🏾‍💼</span>
+            <div>
+              <div class="operator-card-name">Hanna Girmay</div>
+              <div class="operator-card-desk">Desk 1 (Counter)</div>
+            </div>
+          </button>
+
+          <button type="button" class="operator-card-btn" data-clerk="admin" data-pass="fayda2026" data-desk="Desk 1 (Priority & Accessibility Counter)" style="grid-column: span 2;">
             <span class="operator-card-avatar">🛡️</span>
             <div>
-              <div class="operator-card-name">Branch Admin</div>
-              <div class="operator-card-desk">Supervisory Mode</div>
+              <div class="operator-card-name">Supervisor Dawit Haile (Admin)</div>
+              <div class="operator-card-desk">Branch Postmaster • Supervisory Access</div>
             </div>
           </button>
         </div>

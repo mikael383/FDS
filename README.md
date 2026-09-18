@@ -96,9 +96,16 @@ npm run dev
 | **Postal Staff Portal** | `http://localhost:4000` | Postal Staff | Employee login & counter terminal |
 | **Central Dispatch API** | `http://localhost:8000/docs` | Developers/API | Swagger API documentation |
 
-### Staff Credentials
-- **Username**: `clerk` (or `clerk1`, `clerk2`, `admin`)
-- **Password**: `fayda2026` (or `clerk123`)
+### 🔒 Authorized Postal Staff Personnel
+Authentication is strictly restricted to registered branch personnel:
+
+| Staff Name | Username | Assigned Counter | Role | Password |
+| :--- | :--- | :--- | :--- | :--- |
+| **Mulugeta Kebede** | `mulugeta` (or `clerk2`) | Desk 2 (Counter Desk 2) | Senior Counter Officer (Shelf A) | `fayda2026` |
+| **Bethlehem Tadesse** | `bethlehem` (or `clerk1`) | Desk 1 (Priority Counter) | Priority & Accessibility Officer | `fayda2026` |
+| **Tariku Alemu** | `tariku` (or `clerk3`) | Desk 3 (Counter Desk 3) | Counter Dispatch Clerk (Shelf B) | `fayda2026` |
+| **Hanna Girmay** | `hanna` (or `clerk4`) | Desk 1 (Priority Counter) | Counter Service Clerk | `fayda2026` |
+| **Dawit Haile** | `admin` | Desk 1 (Priority Counter) | Branch Postal Supervisor | `fayda2026` |
 
 ---
 
