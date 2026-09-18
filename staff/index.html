@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Postal Staff Portal | Login</title>
-  <meta name="description" content="Secure internal postal staff authentication gateway for Fayda National ID dispatch and counter operations.">
+  <title>Postal Staff Portal | Counter Operations Gateway</title>
+  <meta name="description" content="Official secure postal staff authentication gateway for Fayda National ID storage retrieval and counter dispatch.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
@@ -15,21 +15,26 @@
   <div class="login-wrapper">
     <!-- Brand Header -->
     <div class="login-header">
-      <div class="brand-emblem-large">🇪🇹</div>
-      <h1>Postal Staff Portal</h1>
-      <p class="subtitle">Adama Main Post Office • Counter Operations System</p>
+      <div class="brand-emblem-large" aria-hidden="true">🇪🇹</div>
+      <h1>Postal Counter Portal</h1>
+      <p class="subtitle">Adama Main Post Office • Fayda Dispatch System</p>
+      <div>
+        <span class="system-status-pill">
+          <span class="pulse-dot"></span> Central Dispatch Link Active • Node #04
+        </span>
+      </div>
     </div>
 
     <!-- Login Card -->
     <div class="login-card">
       <div class="login-card-header">
-        <h2>🔒 Employee Authentication</h2>
-        <p>Sign in with your postal staff credentials to operate your assigned counter desk.</p>
+        <h2>🔒 Counter Officer Authentication</h2>
+        <p>Sign in to open your assigned postal counter terminal and access storage bin records.</p>
       </div>
 
       <div id="loginAlert" class="alert-box alert-error" style="display: none;" role="alert"></div>
 
-      <form id="loginForm" class="login-form">
+      <form id="loginForm" class="login-form" autocomplete="on">
         <!-- Username Input -->
         <div class="form-group">
           <label for="usernameInput" class="form-label">
@@ -40,33 +45,38 @@
             id="usernameInput" 
             class="form-input" 
             placeholder="e.g. clerk, clerk1, admin" 
-            value="clerk" 
+            value="clerk2" 
             required
             autocomplete="username"
           >
         </div>
 
-        <!-- Password Input -->
+        <!-- Password Input with Show/Hide Toggle -->
         <div class="form-group">
           <label for="passwordInput" class="form-label">
             <span>🔑</span> Password
           </label>
-          <input 
-            type="password" 
-            id="passwordInput" 
-            class="form-input" 
-            placeholder="Enter clerk password" 
-            value="fayda2026" 
-            required
-            autocomplete="current-password"
-          >
-          <span class="input-hint">Default shared branch password: <code>fayda2026</code> or <code>clerk123</code></span>
+          <div class="password-input-wrap">
+            <input 
+              type="password" 
+              id="passwordInput" 
+              class="form-input" 
+              placeholder="Enter clerk password" 
+              value="fayda2026" 
+              required
+              autocomplete="current-password"
+            >
+            <button type="button" id="togglePasswordBtn" class="toggle-password-btn" title="Show or hide password" aria-label="Toggle password visibility">
+              👁️
+            </button>
+          </div>
+          <span class="input-hint">Branch shared default: <code>fayda2026</code> or <code>clerk123</code></span>
         </div>
 
-        <!-- Desk Assignment Selection -->
+        <!-- Workstation Counter Selection -->
         <div class="form-group">
           <label for="deskSelect" class="form-label">
-            <span>🏢</span> Assigned Counter Workstation
+            <span>🏢</span> Operating Counter Desk
           </label>
           <select id="deskSelect" class="form-input form-select" required>
             <option value="Desk 1 (Priority & Accessibility Counter)">Desk 1 (Priority & Accessibility Counter)</option>
@@ -77,28 +87,59 @@
 
         <!-- Submit Button -->
         <button type="submit" id="loginSubmitBtn" class="btn-primary btn-block">
-          <span>Sign In to Counter Terminal →</span>
+          <span>Sign In to Counter Terminal ➔</span>
         </button>
       </form>
 
-      <!-- Quick Fill Desk Presets -->
-      <div class="login-presets">
-        <span class="preset-label">⚡ Quick Workstation Presets:</span>
-        <div class="preset-buttons">
-          <button type="button" class="preset-chip" onclick="setPreset('clerk1', 'fayda2026', 'Desk 1 (Priority & Accessibility Counter)')">
-            Desk 1 (Priority)
+      <!-- 1-Click Interactive Operator Profiles -->
+      <div class="operator-preset-section">
+        <div class="operator-preset-title">
+          <span>⚡ Fast 1-Click Operator Presets:</span>
+        </div>
+        <div class="operator-preset-grid">
+          <button type="button" class="operator-card-btn active" data-clerk="clerk2" data-pass="fayda2026" data-desk="Desk 2 (Counter Desk 2)">
+            <span class="operator-card-avatar">👨🏾‍💼</span>
+            <div>
+              <div class="operator-card-name">Mulugeta K.</div>
+              <div class="operator-card-desk">Desk 2 (Shelf A)</div>
+            </div>
           </button>
-          <button type="button" class="preset-chip" onclick="setPreset('clerk2', 'fayda2026', 'Desk 2 (Counter Desk 2)')">
-            Desk 2 (Shelf A)
+
+          <button type="button" class="operator-card-btn" data-clerk="clerk1" data-pass="fayda2026" data-desk="Desk 1 (Priority & Accessibility Counter)">
+            <span class="operator-card-avatar">👩🏾‍💼</span>
+            <div>
+              <div class="operator-card-name">Bethlehem T.</div>
+              <div class="operator-card-desk">Desk 1 (Priority)</div>
+            </div>
           </button>
-          <button type="button" class="preset-chip" onclick="setPreset('clerk3', 'fayda2026', 'Desk 3 (Counter Desk 3)')">
-            Desk 3 (Shelf B)
+
+          <button type="button" class="operator-card-btn" data-clerk="clerk3" data-pass="fayda2026" data-desk="Desk 3 (Counter Desk 3)">
+            <span class="operator-card-avatar">👨🏾‍💼</span>
+            <div>
+              <div class="operator-card-name">Tariku A.</div>
+              <div class="operator-card-desk">Desk 3 (Shelf B)</div>
+            </div>
+          </button>
+
+          <button type="button" class="operator-card-btn" data-clerk="admin" data-pass="fayda2026" data-desk="Desk 1 (Priority & Accessibility Counter)">
+            <span class="operator-card-avatar">🛡️</span>
+            <div>
+              <div class="operator-card-name">Branch Admin</div>
+              <div class="operator-card-desk">Supervisory Mode</div>
+            </div>
           </button>
         </div>
+      </div>
+
+      <div class="login-footer">
+        <a href="http://localhost:3000" id="kioskReturnLink" class="link-kiosk">
+          ← Switch to Public Citizen Kiosk
+        </a>
       </div>
     </div>
   </div>
 
+  <script>
     // Dynamic API Base:
     // - In local separate-port mode (port 3000 / 4000), target localhost:8000
     // - On Render / production (or unified port 8000), use relative path ''
@@ -106,12 +147,40 @@
       ? (window.location.hostname === '127.0.0.1' ? 'http://127.0.0.1:8000' : 'http://localhost:8000')
       : '';
 
-    function setPreset(user, pass, desk) {
-      document.getElementById('usernameInput').value = user;
-      document.getElementById('passwordInput').value = pass;
-      document.getElementById('deskSelect').value = desk;
+    // Adjust kiosk return link dynamically based on environment
+    const kioskLink = document.getElementById('kioskReturnLink');
+    if (window.location.port === '4000') {
+      kioskLink.href = `${window.location.protocol}//${window.location.hostname}:3000`;
+    } else {
+      kioskLink.href = '../kiosk/';
     }
 
+    // Password visibility toggle
+    const passwordInput = document.getElementById('passwordInput');
+    const togglePasswordBtn = document.getElementById('togglePasswordBtn');
+    togglePasswordBtn.addEventListener('click', () => {
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        togglePasswordBtn.textContent = '🙈';
+      } else {
+        passwordInput.type = 'password';
+        togglePasswordBtn.textContent = '👁️';
+      }
+    });
+
+    // Preset operator cards
+    document.querySelectorAll('.operator-card-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.operator-card-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        document.getElementById('usernameInput').value = btn.getAttribute('data-clerk');
+        document.getElementById('passwordInput').value = btn.getAttribute('data-pass');
+        document.getElementById('deskSelect').value = btn.getAttribute('data-desk');
+      });
+    });
+
+    // Handle Form Submit
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const username = document.getElementById('usernameInput').value.trim();
@@ -122,7 +191,7 @@
 
       alertBox.style.display = 'none';
       submitBtn.disabled = true;
-      submitBtn.innerHTML = '<span>Authenticating...</span>';
+      submitBtn.innerHTML = '<span>Verifying Credentials...</span>';
 
       try {
         const res = await fetch(`${API_BASE}/api/v1/auth/login`, {
@@ -146,14 +215,18 @@
           loginTime: new Date().toISOString()
         }));
 
-        // Redirect to Staff Terminal
-        window.location.href = 'terminal.html';
+        submitBtn.innerHTML = '<span>✓ Access Granted! Opening Terminal...</span>';
+        submitBtn.style.background = 'linear-gradient(135deg, #059669 0%, #047857 100%)';
+
+        setTimeout(() => {
+          window.location.href = 'terminal.html';
+        }, 350);
 
       } catch (err) {
         alertBox.textContent = err.message;
         alertBox.style.display = 'block';
         submitBtn.disabled = false;
-        submitBtn.innerHTML = '<span>Sign In to Counter Terminal →</span>';
+        submitBtn.innerHTML = '<span>Sign In to Counter Terminal ➔</span>';
       }
     });
   </script>

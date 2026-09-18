@@ -20,18 +20,32 @@
         <div class="brand-titles">
           <h1>
             Fayda Dispatch Terminal
-            <span class="badge-fayda">Staff Operations</span>
+            <span class="badge-fayda">Counter Operations</span>
           </h1>
-          <p>Adama Main Post Office • Desk Dispatch & Handover System</p>
+          <p>Adama Main Post Office • Postal Handover & Physical Bin Dispatch</p>
         </div>
       </div>
+
       <nav class="nav-links" aria-label="Staff Navigation">
-        <div class="clerk-session-badge" id="clerkSessionBadge">
-          <span class="user-avatar">👤</span>
-          <span id="clerkSessionName">Officer Clerk</span>
-          <span class="desk-pill-tag" id="clerkSessionDesk">Desk 1</span>
+        <!-- Live Clock -->
+        <div class="live-clock-badge" id="liveClock" title="Local Branch Time">
+          🕒 --:--:--
         </div>
-        <button type="button" id="clerkLogoutBtn" class="nav-btn-logout" title="Log Out">
+
+        <!-- Active Clerk Session -->
+        <div class="clerk-session-badge" id="clerkSessionBadge">
+          <span class="user-avatar" aria-hidden="true">👤</span>
+          <span id="clerkSessionName">Officer Clerk</span>
+          <span class="desk-pill-tag" id="clerkSessionDesk">Desk 2</span>
+        </div>
+
+        <!-- Return to Kiosk -->
+        <a href="http://localhost:3000" id="navKioskLink" class="nav-btn-secondary" title="View Citizen Public Kiosk">
+          <span>🖥️</span> Kiosk View
+        </a>
+
+        <!-- Logout Button -->
+        <button type="button" id="clerkLogoutBtn" class="nav-btn-logout" title="Log Out of Workstation">
           <span>🚪</span> Logout
         </button>
       </nav>
@@ -42,27 +56,27 @@
     <!-- Clerk Terminal Header Panel -->
     <div class="clerk-header-panel">
       <div class="terminal-title">
-        <h2>Counter Service & Storage Retrieval</h2>
+        <h2><span>📦</span> Counter Service & Storage Bin Retrieval</h2>
         <p>Locate physical storage bins, verify citizen identities, and process official card handovers</p>
       </div>
 
-      <!-- Clerk Station Configuration -->
+      <!-- Clerk Station Configuration Switcher -->
       <div class="clerk-station-badge">
         <div>
-          <div class="station-meta-label">Operator Clerk</div>
-          <select id="clerkSelect" style="background:transparent; color:#fbbf24; border:none; font-weight:700; font-size:0.95rem; cursor:pointer;">
-            <option value="CLK-ADAMA-01" selected>CLK-ADAMA-01 (Mulugeta)</option>
+          <div class="station-meta-label"><span>👤</span> Operator Clerk</div>
+          <select id="clerkSelect" class="station-select">
+            <option value="CLK-ADAMA-01">CLK-ADAMA-01 (Mulugeta)</option>
             <option value="CLK-ADAMA-02">CLK-ADAMA-02 (Bethlehem)</option>
             <option value="CLK-ADAMA-03">CLK-ADAMA-03 (Tariku)</option>
             <option value="CLK-ADAMA-04">CLK-ADAMA-04 (Hanna)</option>
           </select>
         </div>
-        <div style="border-left: 1px solid rgba(255,255,255,0.2); padding-left: 1rem;">
-          <div class="station-meta-label">Current Counter</div>
-          <select id="deskSelect" style="background:transparent; color:#fbbf24; border:none; font-weight:700; font-size:0.95rem; cursor:pointer;">
+        <div style="border-left: 1px solid rgba(255,255,255,0.2); padding-left: 1.25rem;">
+          <div class="station-meta-label"><span>🏢</span> Active Counter</div>
+          <select id="deskSelect" class="station-select">
             <option value="Desk 1 (Priority & Accessibility Counter)">Desk 1 (Priority)</option>
-            <option value="Desk 2 (Counter Desk 2)" selected>Desk 2 (Counter Desk 2)</option>
-            <option value="Desk 3 (Counter Desk 3)">Desk 3 (Counter Desk 3)</option>
+            <option value="Desk 2 (Counter Desk 2)" selected>Desk 2 (Counter Desk 2 - Shelf A)</option>
+            <option value="Desk 3 (Counter Desk 3)">Desk 3 (Counter Desk 3 - Shelf B)</option>
           </select>
         </div>
       </div>
@@ -75,15 +89,15 @@
           <div class="stat-info-title">Ready in Storage</div>
           <div class="stat-info-num" id="statReady">-</div>
         </div>
-        <div class="stat-icon-wrap">📦</div>
+        <div class="stat-icon-wrap" aria-hidden="true">📦</div>
       </div>
 
       <div class="stat-card stat-transit">
         <div>
-          <div class="stat-info-title">In Transit</div>
+          <div class="stat-info-title">In Transit from Hub</div>
           <div class="stat-info-num" id="statTransit">-</div>
         </div>
-        <div class="stat-icon-wrap">🚚</div>
+        <div class="stat-icon-wrap" aria-hidden="true">🚚</div>
       </div>
 
       <div class="stat-card stat-today">
@@ -91,98 +105,190 @@
           <div class="stat-info-title">Handed Over Today</div>
           <div class="stat-info-num" id="statToday">-</div>
         </div>
-        <div class="stat-icon-wrap">🤝</div>
+        <div class="stat-icon-wrap" aria-hidden="true">🤝</div>
       </div>
 
       <div class="stat-card stat-total">
         <div>
-          <div class="stat-info-title">Total Registry</div>
+          <div class="stat-info-title">Total Registry Records</div>
           <div class="stat-info-num" id="statTotal">-</div>
         </div>
-        <div class="stat-icon-wrap">📑</div>
+        <div class="stat-icon-wrap" aria-hidden="true">📑</div>
       </div>
     </div>
 
     <!-- Main Clerk Interaction Grid -->
     <div class="clerk-grid">
-      <!-- Left: Citizen Lookup & Quick Bin Finder -->
+      <!-- Left: Citizen Lookup & Storage Rack Locator -->
       <div class="panel-card">
         <div class="panel-header">
           <h3><span>🔍</span> Citizen Retrieval & Bin Locator</h3>
-          <span style="font-size:0.8rem; color:#64748b;">Instant Search</span>
+          <span style="font-size:0.8rem; font-weight:700; color:#3b82f6;">Instant Lookup</span>
         </div>
 
+        <!-- Search Bar -->
         <div class="clerk-search-row">
           <input
             type="text"
             id="clerkSearchInput"
             class="clerk-input"
-            placeholder="Enter Fayda ID or Phone Number..."
+            placeholder="Scan Barcode or Enter Fayda ID / Phone..."
             autocomplete="off"
+            autofocus
           >
           <button type="button" id="clerkSearchBtn" class="btn-secondary-action">
-            Fetch Card
+            <span>Fetch Card</span> ➔
           </button>
         </div>
 
-        <!-- Quick 1-click citizen selector -->
-        <div style="margin-bottom: 1.25rem;">
-          <div style="font-size: 0.75rem; font-weight: 700; color: #64748b; margin-bottom: 0.4rem; text-transform: uppercase;">
-            Quick Citizen Selection:
+        <!-- Categorized Fast Testing Sample Pills -->
+        <div style="margin-bottom: 1.5rem;">
+          <div style="font-size: 0.75rem; font-weight: 800; color: #64748b; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">
+            ⚡ Quick Citizen Dispatch Testing:
           </div>
           <div class="sample-pills" id="clerkSamplePills">
-            <!-- Dynamically populated -->
+            <!-- Dynamically populated from /api/v1/citizens/samples -->
           </div>
         </div>
 
         <!-- Active Citizen Retrieval & Bin Card -->
         <div id="activeHandoverBox" class="active-handover-box">
-          <!-- Bin Locator Banner -->
+          <!-- Physical Storage Bin Locator Banner -->
           <div class="bin-locator-banner">
-            <div class="bin-locator-title">PHYSICAL STORAGE BIN LOCATOR</div>
-            <div class="bin-locator-code" id="activeStorageBin">Shelf A / Box 04</div>
-          </div>
-
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
             <div>
-              <h4 id="activeCitizenName" style="font-size: 1.2rem; font-weight: 800; color: #0f172a;">-</h4>
-              <p id="activeFaydaId" style="font-family: monospace; color: #64748b; font-size: 0.85rem;">-</p>
+              <div class="bin-locator-title">📍 PHYSICAL STORAGE BIN LOCATION</div>
+              <div class="bin-locator-code" id="activeStorageBin">Shelf A / Box 04</div>
             </div>
             <div>
               <span id="activeStatusPill" class="status-pill ready">Ready for Collection</span>
             </div>
           </div>
 
-          <div class="details-grid" style="grid-template-columns: 1fr 1fr; gap: 0.75rem;">
-            <div class="detail-box">
-              <div class="detail-box-label">Phone Number</div>
-              <div class="detail-box-value" id="activePhone">-</div>
+          <!-- Interactive Storage Rack Architecture Graphic -->
+          <div class="physical-rack-visualizer">
+            <div class="rack-visual-header">
+              <span>🏛️ STORAGE ROOM RACK SCHEMATIC</span>
+              <span class="rack-target-pill" id="rackTargetBadge">Locating Slot...</span>
             </div>
-            <div class="detail-box">
-              <div class="detail-box-label">Age & DOB</div>
-              <div class="detail-box-value" id="activeDob">-</div>
+            <div class="racks-display">
+              <!-- Rack Shelf A (Desk 2) -->
+              <div class="rack-pod" id="rackPodA">
+                <div class="rack-pod-title">
+                  <span>RACK SHELF A</span>
+                  <span style="font-size:0.68rem; color:#2563eb; font-weight:800;">Desk 2</span>
+                </div>
+                <div class="rack-grid-boxes">
+                  <div class="box-cell" data-box="Box 01">01</div>
+                  <div class="box-cell" data-box="Box 02">02</div>
+                  <div class="box-cell" data-box="Box 03">03</div>
+                  <div class="box-cell" data-box="Box 04">04</div>
+                  <div class="box-cell" data-box="Box 05">05</div>
+                  <div class="box-cell" data-box="Box 06">06</div>
+                  <div class="box-cell" data-box="Box 07">07</div>
+                  <div class="box-cell" data-box="Box 08">08</div>
+                  <div class="box-cell" data-box="Box 09">09</div>
+                  <div class="box-cell" data-box="Box 10">10</div>
+                  <div class="box-cell" data-box="Box 11">11</div>
+                  <div class="box-cell" data-box="Box 12">12</div>
+                  <div class="box-cell" data-box="Box 13">13</div>
+                  <div class="box-cell" data-box="Box 14">14</div>
+                  <div class="box-cell" data-box="Box 15">15</div>
+                </div>
+              </div>
+
+              <!-- Rack Shelf B (Desk 3) -->
+              <div class="rack-pod" id="rackPodB">
+                <div class="rack-pod-title">
+                  <span>RACK SHELF B</span>
+                  <span style="font-size:0.68rem; color:#d97706; font-weight:800;">Desk 3</span>
+                </div>
+                <div class="rack-grid-boxes">
+                  <div class="box-cell" data-box="Box 01">01</div>
+                  <div class="box-cell" data-box="Box 02">02</div>
+                  <div class="box-cell" data-box="Box 03">03</div>
+                  <div class="box-cell" data-box="Box 04">04</div>
+                  <div class="box-cell" data-box="Box 05">05</div>
+                  <div class="box-cell" data-box="Box 06">06</div>
+                  <div class="box-cell" data-box="Box 07">07</div>
+                  <div class="box-cell" data-box="Box 08">08</div>
+                  <div class="box-cell" data-box="Box 09">09</div>
+                  <div class="box-cell" data-box="Box 10">10</div>
+                  <div class="box-cell" data-box="Box 11">11</div>
+                  <div class="box-cell" data-box="Box 12">12</div>
+                  <div class="box-cell" data-box="Box 13">13</div>
+                  <div class="box-cell" data-box="Box 14">14</div>
+                  <div class="box-cell" data-box="Box 15">15</div>
+                </div>
+              </div>
             </div>
-            <div class="detail-box">
-              <div class="detail-box-label">Routing Counter</div>
-              <div class="detail-box-value" id="activeAssignedDesk" style="color: #1d4ed8; font-weight: 700;">-</div>
+          </div>
+
+          <!-- Digital Biometric Fayda ID Card Replica -->
+          <div class="fayda-card-replica">
+            <div class="fayda-replica-top">
+              <div class="fayda-replica-header-text">
+                FDRE NATIONAL ID PROGRAM • FAYDA DIGITAL IDENTITY
+              </div>
+              <div class="fayda-replica-chip" title="Smart Card Hologram Chip"></div>
             </div>
+            <div class="fayda-replica-body">
+              <div class="fayda-replica-avatar" aria-hidden="true">
+                👤
+              </div>
+              <div>
+                <div class="fayda-replica-name" id="activeCitizenName">-</div>
+                <div class="fayda-replica-fan" id="activeFaydaId">-</div>
+                <div class="fayda-replica-meta">
+                  <span>DOB: <strong id="activeDob">-</strong></span>
+                  <span>TEL: <strong id="activePhone">-</strong></span>
+                  <span>COUNTER: <strong id="activeAssignedDesk" style="color:#fbbf24;">-</strong></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Details Grid -->
+          <div class="details-grid" style="grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.25rem;">
             <div class="detail-box">
-              <div class="detail-box-label">Arrival Date</div>
+              <div class="detail-box-label">Batch Arrival Time</div>
               <div class="detail-box-value" id="activeArrivedAt">-</div>
             </div>
+            <div class="detail-box">
+              <div class="detail-box-label">Dispatch Desk Assignment</div>
+              <div class="detail-box-value" id="activeDeskDisplay" style="color: #1d4ed8; font-weight: 800;">-</div>
+            </div>
+          </div>
+
+          <!-- Verification Checklist -->
+          <div class="handover-checklist-box">
+            <div class="handover-checklist-title">
+              <span>📋</span> Mandatory Handover Verification:
+            </div>
+            <label class="check-item">
+              <input type="checkbox" id="checkKebeleId" checked>
+              <span>Physical Kebele / Passport Identity Verified</span>
+            </label>
+            <label class="check-item">
+              <input type="checkbox" id="checkSmsOtp" checked>
+              <span>Registered Mobile SMS / Notification Confirmed</span>
+            </label>
+            <label class="check-item">
+              <input type="checkbox" id="checkPhysicalCard" checked>
+              <span>Plastic Card Extracted from Storage Bin</span>
+            </label>
           </div>
 
           <!-- Confirm Handover Button -->
           <button type="button" id="confirmHandoverBtn" class="btn-handover">
-            <span>✓ Confirm Handover & Issue Card</span>
+            <span>✓ Confirm Handover & Issue Official Receipt</span>
           </button>
         </div>
 
         <!-- Empty State Placeholder -->
         <div id="clerkEmptyState" class="empty-state">
-          <span style="font-size: 2.5rem; display: block; margin-bottom: 0.5rem;">📥</span>
+          <span style="font-size: 3rem; display: block; margin-bottom: 0.75rem;" aria-hidden="true">📥</span>
           <h4>No Citizen Selected</h4>
-          <p>Search for a citizen by Fayda ID or Phone Number to reveal their exact storage bin and process handover.</p>
+          <p>Scan a barcode or search by Fayda ID to locate physical storage bins and execute official handovers.</p>
         </div>
       </div>
 
@@ -190,23 +296,25 @@
       <div class="panel-card">
         <div class="panel-header">
           <h3><span>📜</span> Today's Handover Audit Log</h3>
-          <button type="button" id="refreshAuditBtn" class="refresh-btn" title="Refresh Log">
-            🔄 Refresh
-          </button>
+          <div style="display: flex; gap: 0.5rem; align-items: center;">
+            <button type="button" id="refreshAuditBtn" class="refresh-btn" title="Refresh Audit Log">
+              🔄 Refresh
+            </button>
+          </div>
         </div>
 
-        <p style="font-size: 0.82rem; color: #64748b; margin-bottom: 1rem;">
-          Real-time record of all Fayda cards successfully verified and issued by counter operators today.
+        <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.25rem;">
+          Real-time tamper-evident record of all Fayda cards verified and issued across branch counters today.
         </p>
 
-        <div class="table-wrapper" style="max-height: 480px; overflow-y: auto;">
+        <div class="table-wrapper" style="max-height: 520px; overflow-y: auto;">
           <table class="data-table" aria-label="Recent Handovers">
             <thead>
               <tr>
                 <th>Time (UTC)</th>
                 <th>Citizen Name</th>
                 <th>Fayda ID</th>
-                <th>Counter Desk</th>
+                <th>Counter</th>
                 <th>Clerk</th>
               </tr>
             </thead>
@@ -227,13 +335,25 @@
             Full branch registry categorized by storage shelf and delivery state.
           </p>
         </div>
-        <!-- Status filter pill buttons -->
+
+        <!-- Status Filter Pills -->
         <div class="filter-pills" id="statusFilterPills">
           <button type="button" class="filter-pill active" data-status="All">All</button>
           <button type="button" class="filter-pill" data-status="Ready for Collection">Ready</button>
           <button type="button" class="filter-pill" data-status="In Transit">In Transit</button>
           <button type="button" class="filter-pill" data-status="Collected">Collected</button>
         </div>
+      </div>
+
+      <!-- Real-Time Registry Search -->
+      <div style="margin-bottom: 1.25rem;">
+        <input 
+          type="text" 
+          id="inventorySearchInput" 
+          class="clerk-input" 
+          placeholder="Filter inventory table by name, Fayda ID, or phone in real time..."
+          style="padding: 0.65rem 1rem; font-size: 0.9rem;"
+        >
       </div>
 
       <div class="table-wrapper">
@@ -256,6 +376,56 @@
       </div>
     </div>
   </main>
+
+  <!-- Digital Handover Receipt Slip Modal -->
+  <div id="receiptModal" class="receipt-modal-backdrop" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="receiptModalTitle">
+    <div class="receipt-slip-container">
+      <div class="receipt-header">
+        <div style="font-size: 2rem; margin-bottom: 0.25rem;" aria-hidden="true">🇪🇹</div>
+        <h3 id="receiptModalTitle">Ethiopian Postal Service</h3>
+        <p style="font-size: 0.8rem; color: #64748b; font-weight: 700;">Adama Main Post Office • Official Handover Slip</p>
+        <div class="receipt-num" id="receiptCode">RCP-ADAMA-0000</div>
+      </div>
+
+      <div class="receipt-row">
+        <span class="r-label">Citizen Name:</span>
+        <span class="r-val" id="receiptCitizenName">-</span>
+      </div>
+      <div class="receipt-row">
+        <span class="r-label">Fayda National ID:</span>
+        <span class="r-val" id="receiptFaydaId">-</span>
+      </div>
+      <div class="receipt-row">
+        <span class="r-label">Registered Phone:</span>
+        <span class="r-val" id="receiptPhone">-</span>
+      </div>
+      <div class="receipt-row">
+        <span class="r-label">Issued Counter Desk:</span>
+        <span class="r-val" id="receiptDesk">-</span>
+      </div>
+      <div class="receipt-row">
+        <span class="r-label">Attending Clerk ID:</span>
+        <span class="r-val" id="receiptClerk">-</span>
+      </div>
+      <div class="receipt-row">
+        <span class="r-label">Issue Timestamp:</span>
+        <span class="r-val" id="receiptTime">-</span>
+      </div>
+
+      <div class="receipt-stamp">
+        ✓ OFFICIAL DISPATCH VERIFIED
+      </div>
+
+      <div class="receipt-actions">
+        <button type="button" id="printReceiptBtn" class="btn-print-receipt">
+          🖨️ Print Dispatch Slip
+        </button>
+        <button type="button" id="closeReceiptBtn" class="btn-close-receipt">
+          Next Citizen ➔
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- Notification Toast Container -->
   <div id="toastContainer" class="toast-container" aria-live="assertive"></div>
